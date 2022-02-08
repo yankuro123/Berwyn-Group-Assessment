@@ -51,28 +51,9 @@ namespace BerwyngroupEvaluaion
         static List<string> Duplicate(List<Information> list)
         {
             List<Information> Checker = new List<Information>(list);
-            List<string> DupeList = new List<string>();
-            for (int i = 0; i < Checker.Count; i++)
-            {
-                for (int a = 0; a < Checker.Count; a++)
-                {
-                    if (Checker[i].GUID == Checker[a].GUID)
-                    {
-                        Checker.RemoveAt(a);
-                        DupeList.Add(Checker[i].GUID);
-                    }
-                }
-            }
-            for (int x = 0; x < DupeList.Count; x++)
-            {
-                for (int y = 0; y < DupeList.Count; y++)
-                {
-                    if (DupeList[x] ==  DupeList[y])
-                    {
-                        DupeList.RemoveAt(y);
-                    }
-                }
-            }
+            var DupeList = Checker.GroupBy(x => x.GUID)
+                .Where(y => y.Count() > 1)
+                .Select(a => a.Key).ToList();
             return DupeList;
         }
         static float Average(List<Information> List)
